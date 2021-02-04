@@ -17,7 +17,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from "react-native";
-import { BlankFiller } from "./filler";
+import { BlankFiller } from "./comp";
 import { styles } from "./styles";
 import {
   getDeviceHeight,
@@ -102,7 +102,6 @@ export default class ActionSheet extends Component {
     if (this.isClosing) {
       this.openAfterClosing = true;
     }
-
     let modalVisible = this.state.modalVisible;
     if (visible !== undefined) {
       if (modalVisible === visible) {
@@ -111,10 +110,12 @@ export default class ActionSheet extends Component {
       modalVisible = !visible;
     }
     if (!modalVisible) {
+      this.layoutHasCalled = false;
       this.setState({
         modalVisible: true,
         scrollable: this.props.gestureEnabled,
       });
+ 
     
     } else {
       this._hideModal();
@@ -168,6 +169,7 @@ export default class ActionSheet extends Component {
             }
             DeviceEventEmitter.emit("hasReachedTop", false);
             if (closable) {
+              console.log('layout set to false')
               this.layoutHasCalled = false;
               if (typeof onClose === "function") onClose();
             }
@@ -218,6 +220,7 @@ export default class ActionSheet extends Component {
       if (!gestureEnabled) {
         DeviceEventEmitter.emit("hasReachedTop");
       }
+      console.log('calling on close')
       this.layoutHasCalled = true;
     }
   };
@@ -489,9 +492,8 @@ export default class ActionSheet extends Component {
         height?.toFixed(0) === calculatedDeviceHeight?.toFixed(0) &&
         width?.toFixed(0) === this.state.deviceWidth?.toFixed(0)
       ) {
-        if (!this.layoutHasCalled) {
-          emitHeight();
-        }
+        console.log('emitter',this.layoutHasCalled)
+         emitHeight();
         return;
       }
   
@@ -508,7 +510,9 @@ export default class ActionSheet extends Component {
   
       if (prevHeight < calculatedDeviceHeight || !this.layoutHasCalled) {
         updateHeight();
+        console.log('height')
       } else {
+        console.log('emit')
         emitHeight();
       }
       waitAsync(prevHeight > calculatedDeviceHeight ? 5 : 0).then(() => {
@@ -586,7 +590,6 @@ export default class ActionSheet extends Component {
   renderComponent = () => {
     let { scrollable, keyboard } = this.state;
     let {
-      isOverlay,
       overlayColor,
       gestureEnabled,
       elevation,
@@ -599,6 +602,8 @@ export default class ActionSheet extends Component {
       keyboardShouldPersistTaps,
       hideUnderlay,
     } = this.props;
+
+    let isOverlay = false;
 
     let pointerEventsBox = isOverlay ? "box-none" : "auto";
     let pointerEventsNone = isOverlay ? "none" : "auto";
@@ -646,7 +651,7 @@ export default class ActionSheet extends Component {
             backgroundColor:'transparent'
           }}
           onMoveShouldSetResponder={this.onMoveResponder}
-          pointerEvents={Platform.OS === "ios" ? pointerEventsBox : pointerEventsNone}
+          pointerEvents={pointerEventsNone}
           data={["dummy"]}
           keyExtractor={(item) => item}
           renderItem={({ item, index }) => (
