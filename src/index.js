@@ -17,7 +17,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from "react-native";
-import { BlankFiller } from "react-native-actions-sheet/src/comp";
+import { BlankFiller } from "./filler";
 import { styles } from "./styles";
 import {
   getDeviceHeight,
