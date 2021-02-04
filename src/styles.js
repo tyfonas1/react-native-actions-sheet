@@ -26,4 +26,25 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  overlayContainer: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    zIndex: 999,
+    elevation: 10,
+  },
+  keyboardView:{
+    width: "100%",
+    height: "100%",
+  },
+  safeArea:{
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    backgroundColor: "transparent",
+  },
+  safeAreaChild:{
+    width: "100%",
+    height: "100%",
+  }
 });

@@ -34,3 +34,5 @@ new Promise((resolve, reject) => {
 	resolve();
   }, ms);
 });
+
+export const HEIGHT_CHANGE_EVENT = "sheet_height_change_rnas"
