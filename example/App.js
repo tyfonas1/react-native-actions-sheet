@@ -8,10 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ActionSheet, {
-  addHasReachedTopListener,
-  removeHasReachedTopListener,
-} from 'react-native-actions-sheet';
+import ActionSheet,{addHasReachedTopListener,removeHasReachedTopListener} from "react-native-actions-sheet"
 
 const App = () => {
   const actionSheetRef = useRef();
@@ -45,23 +42,20 @@ const App = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.safeareview}>
-        <TouchableOpacity
-          onPress={() => {
-            actionSheetRef.current?.show();
-          }}
-          style={styles.btn}>
-          <Text style={styles.btnTitle}>Open ActionSheet</Text>
-        </TouchableOpacity>
-
+      <SafeAreaView style={styles.safeareview}
+      
+    
+      >
         <ActionSheet
-          initialOffsetFromBottom={0.6}
+          initialOffsetFromBottom={1}
           ref={actionSheetRef}
           onOpen={onOpen}
-          statusBarTranslucent
+          isOverlay={true}
+          statusBarTranslucent={false}
           bounceOnOpen={true}
           bounciness={4}
           gestureEnabled={true}
+          hideUnderlay
           onClose={onClose}
           defaultOverlayOpacity={0.3}>
           <ScrollView
@@ -96,13 +90,9 @@ const App = () => {
               )}
             </View>
 
-            <TextInput
-              style={styles.input}
-              multiline={true}
-              placeholder="Write your text here"
-            />
-
-            <View>
+            <Input />
+{/* 
+                <View>
               {items.map(item => (
                 <TouchableOpacity
                   key={item}
@@ -123,18 +113,43 @@ const App = () => {
                   <View style={styles.btnLeft} />
                 </TouchableOpacity>
               ))}
-            </View>
-
+            </View> 
+ */}
             {/*  Add a Small Footer at Bottom */}
             <View style={styles.footer} />
           </ScrollView>
         </ActionSheet>
+
+        <TouchableOpacity
+          onPress={() => {
+            actionSheetRef.current?.show();
+          }}
+          style={styles.btn}>
+          <Text style={styles.btnTitle}>Open ActionSheet</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </>
   );
 };
 
 export default App;
+
+const Input = React.memo(
+  () => {
+    return (
+      <TextInput
+        style={styles.input}
+        multiline={true}
+        placeholder="Write your text here"
+        style={{
+          paddingBottom: 25,
+          backgroundColor:'gray'
+        }}
+      />
+    );
+  },
+  () => true,
+);
 
 const items = [
   100,
@@ -200,6 +215,7 @@ const styles = StyleSheet.create({
   scrollview: {
     width: '100%',
     padding: 12,
+    zIndex: 999,
   },
   btn: {
     height: 50,
@@ -209,11 +225,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fe8a71',
     paddingHorizontal: 10,
     borderRadius: 5,
-    elevation: 5,
-    shadowColor: 'black',
-    shadowOffset: {width: 0.3 * 4, height: 0.5 * 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 0.7 * 4,
   },
   safeareview: {
     justifyContent: 'center',
