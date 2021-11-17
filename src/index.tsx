@@ -585,22 +585,32 @@ export default class ActionSheet extends Component<Props, State, any> {
     }
   };
 
-  componentWillUnmount() {
+componentWillUnmount() {
     this.keyboardShowSubscription?.remove();
     this.KeyboardHideSubscription?.remove();
 
     if (Keyboard.removeListener) {
-      Keyboard.removeListener(
+      // Keyboard.removeListener(
+      //   Platform.OS === "android" ? "keyboardDidShow" : "keyboardWillShow",
+      //   this._onKeyboardShow
+      // );
+      Keyboard.addListener(
         Platform.OS === "android" ? "keyboardDidShow" : "keyboardWillShow",
         this._onKeyboardShow
-      );
 
-      Keyboard.removeListener(
+    ).remove()
+
+      // Keyboard.removeListener(
+      //   Platform.OS === "android" ? "keyboardDidHide" : "keyboardWillHide",
+      //   this._onKeyboardHide
+      // );
+      Keyboard.addListener(
         Platform.OS === "android" ? "keyboardDidHide" : "keyboardWillHide",
         this._onKeyboardHide
-      );
+    ).remove();
     }
   }
+
 
   _onDeviceLayout = async (_event: LayoutChangeEvent) => {
     let event = { ..._event };
